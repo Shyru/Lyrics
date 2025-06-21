@@ -16,8 +16,14 @@ app.get('/', (req, res) => {
 let activeUsers = 0;
 
 io.on('connection', (socket) => {
-    activeUsers++;
-    io.emit('userCount', activeUsers);
+    socket.on('toggleScroll', (isEnabled) => {
+        if (isEnabled) {
+            activeUsers++;
+        } else {
+            activeUsers--;
+        }
+        io.emit('userCount', activeUsers);
+    });
     console.log('a user connected');
     socket.on('scrollTo', (pId) => {
         io.emit('scrollTo', pId);

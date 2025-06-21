@@ -478,6 +478,7 @@
         document.getElementById('toggleAutoScroll').addEventListener('click', function() {
             autoScrollEnabled = !autoScrollEnabled;
             this.classList.toggle('active', autoScrollEnabled);
+            socket.emit('toggleScroll', autoScrollEnabled);
             if (autoScrollEnabled && lastScrollId !== null) {
                 const p = document.querySelector(`p[data-id='${lastScrollId}']`);
                 if (p) {
