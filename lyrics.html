@@ -12,6 +12,10 @@
             padding: 0;
             line-height: 1.6;
             transition: background-color 0.3s, color 0.3s;
+            tocLinks.forEach(link => {
+                const currentSize = parseFloat(window.getComputedStyle(link, null).getPropertyValue('font-size'));
+                link.style.fontSize = (currentSize + (amount * 3)) + 'px';
+            });
         }
         
         section {
@@ -306,6 +310,7 @@
     <script>
         function changeFontSize(amount) {
             const paragraphs = document.querySelectorAll('p');
+            const tocLinks = document.querySelectorAll('.toc a');
             paragraphs.forEach(p => {
                 const currentSize = parseFloat(window.getComputedStyle(p, null).getPropertyValue('font-size'));
                 p.style.fontSize = (currentSize + (amount * 3)) + 'px';
