@@ -100,7 +100,7 @@
             const paragraphs = document.querySelectorAll('p');
             paragraphs.forEach(p => {
                 const currentSize = parseFloat(window.getComputedStyle(p, null).getPropertyValue('font-size'));
-                p.style.fontSize = (currentSize + amount) + 'px';
+                p.style.fontSize = (currentSize + (amount * 3)) + 'px';
             });
         }
 
