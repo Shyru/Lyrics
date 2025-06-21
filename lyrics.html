@@ -12,10 +12,7 @@
             padding: 0;
             line-height: 1.6;
             transition: background-color 0.3s, color 0.3s;
-            tocLinks.forEach(link => {
-                const currentSize = parseFloat(window.getComputedStyle(link, null).getPropertyValue('font-size'));
-                link.style.fontSize = (currentSize + (amount * 3)) + 'px';
-            });
+
         }
         
         section {
@@ -62,7 +59,7 @@
             padding: 10px;
             font-size: 16px;
         }
-        h1 {
+        h2 {
             font-size: 2em;
             margin: 20px 0;
         }
@@ -87,11 +84,11 @@
         <button onclick="toggleDarkMode()"><i class="fas fa-moon"></i></button>
     </div>
     <div class="toc">
-        <h2>Lieder Sportwoche Gottesdienst</h2>
+        <h1>Lieder Sportwoche Gottesdienst</h1>
     </div>
 
     <section>
-        <h1>Lobet</h1>
+        <h2>Lobet</h2>
         <p>
             Lobet den m&auml;chtigen K&ouml;nig der Ehren!<br/>
             Wacht auf, lasst den Lobgesang h&ouml;ren.<br/>
@@ -130,7 +127,7 @@
 
 
     <section>
-        <h1>Great Things</h1>
+        <h2>Great Things</h2>
         <p>
             Come let us worship our King. Come let us bow &nbsp;at his feet.<br/>
             He has &nbsp;done great things.<br/>
@@ -175,7 +172,7 @@
 
 
     <section>
-        <h1>Alles tanzt</h1>
+        <h2>Alles tanzt</h2>
         <p>
             Diese Gef&uuml;hl, ein neuer Rhythmus,&nbsp; der in mir Leben weckt.<br/>
             Ich breche frei aus alten Mauern hinein in Ewigkeit.<br/>
@@ -223,7 +220,7 @@
     </section>
 
     <section>
-        <h1>Du bist es wert</h1>
+        <h2>Du bist es wert</h2>
         <p>
             Du bist es wert, dass wir f&uuml;r dich singen.<br/>
             Du bist es wert, dass wir f&uuml;r dich tanzen.<br/>
@@ -260,7 +257,7 @@
 
 
     <section>
-        <h1>Du bist gut</h1>
+        <h2>Du bist gut</h2>
         <p>
             Die ganze Welt soll h&ouml;rn, wie gut du zu uns bist,<br/>
             wie gro&szlig; und grenzenlos doch deine Gnade ist.<br/>
@@ -310,10 +307,16 @@
     <script>
         function changeFontSize(amount) {
             const paragraphs = document.querySelectorAll('p');
-            const tocLinks = document.querySelectorAll('.toc a');
+
             paragraphs.forEach(p => {
                 const currentSize = parseFloat(window.getComputedStyle(p, null).getPropertyValue('font-size'));
                 p.style.fontSize = (currentSize + (amount * 3)) + 'px';
+            });
+
+            const tocLinks = document.querySelectorAll('.toc a');
+            tocLinks.forEach(link => {
+                const currentSize = parseFloat(window.getComputedStyle(link, null).getPropertyValue('font-size'));
+                link.style.fontSize = (currentSize + (amount * 3)) + 'px';
             });
         }
 
@@ -324,7 +327,7 @@
             const toc = document.querySelector('.toc');
             const sections = document.querySelectorAll('section');
             sections.forEach(section => {
-                const title = section.querySelector('h1').innerText;
+                const title = section.querySelector('h2').innerText;
                 const id = section.getAttribute('id') || title.replace(/\s+/g, '-').toLowerCase();
                 section.setAttribute('id', id);
                 const link = document.createElement('a');
