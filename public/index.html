@@ -14,6 +14,15 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
+        .highlight {
+            background-color: #ffff99; /* Helle Hervorhebung */
+            transition: background-color 0.5s ease;
+        }
+
+        .dark-mode .highlight {
+            background-color: #555555; /* Dunkle Hervorhebung im Dark-Mode */
+        }
+
         .active-paragraph {
             border: 2px solid #8B0000; /* Samtiger Rand */
             padding: 5px;
@@ -355,6 +364,8 @@
             if (p && autoScrollEnabled && !isPresenter) {
                 console.log(`Scrolling to paragraph with ID: ${pId}`);
                 p.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                p.classList.add('highlight');
+                setTimeout(() => p.classList.remove('highlight'), 1000);
             }
             lastScrollId = pId;
         });
