@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Songtexte für das Event</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+        .controls {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+        }
+        .controls button {
+            margin: 5px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        h1 {
+            font-size: 2em;
+            margin: 20px 0;
+        }
+        p {
+            margin: 10px 0;
+        }
+        .toc {
+            margin: 20px;
+        }
+        .toc a {
+            display: block;
+            margin: 5px 0;
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <button onclick="changeFontSize(1)">+</button>
+        <button onclick="changeFontSize(-1)">-</button>
+        <button onclick="toggleDarkMode()">Dark Mode</button>
+    </div>
+    <div class="toc">
+        <h2>Inhaltsverzeichnis</h2>
+        <a href="#song1">Lied 1</a>
+        <a href="#song2">Lied 2</a>
+        <a href="#song3">Lied 3</a>
+    </div>
+    <div id="song1">
+        <h1>Lied 1</h1>
+        <p>Erster Vers des Liedes 1<br>Weiterer Text...</p>
+    </div>
+    <div id="song2">
+        <h1>Lied 2</h1>
+        <p>Erster Vers des Liedes 2<br>Weiterer Text...</p>
+    </div>
+    <div id="song3">
+        <h1>Lied 3</h1>
+        <p>Erster Vers des Liedes 3<br>Weiterer Text...</p>
+    </div>
+    <script>
+        function changeFontSize(amount) {
+            const body = document.body;
+            const currentSize = parseFloat(window.getComputedStyle(body, null).getPropertyValue('font-size'));
+            body.style.fontSize = (currentSize + amount) + 'px';
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+    </script>
+</body>
+</html>
