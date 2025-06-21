@@ -13,10 +13,19 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+let activeUsers = 0;
+
 io.on('connection', (socket) => {
+    activeUsers++;
+    io.emit('userCount', activeUsers);
     console.log('a user connected');
     socket.on('scrollTo', (pId) => {
         io.emit('scrollTo', pId);
+    });
+
+    socket.on('disconnect', () => {
+        activeUsers--;
+        io.emit('userCount', activeUsers);
     });
     socket.on('disconnect', () => {
         console.log('user disconnected');
