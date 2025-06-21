@@ -13,6 +13,10 @@
             line-height: 1.6;
             transition: background-color 0.3s, color 0.3s;
         }
+
+        body.presenter-active {
+            padding-top: 50px; /* Platz für die Präsentationsleiste */
+        }
         
         .controls button {
             margin: 5px;
@@ -328,6 +332,7 @@
             p.setAttribute('data-id', index);
             if (isPresenter) {
                 presenterBar.style.display = 'block';
+                document.body.classList.add('presenter-active');
                 p.addEventListener('click', () => {
                     socket.emit('scrollTo', index);
                 });
