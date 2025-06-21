@@ -103,9 +103,54 @@
             padding: 10px;
             z-index: 1001;
         }
-    </style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1003;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
 </head>
 <body>
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2>Automatisches Scrollen</h2>
+            <p>Diese Seite verfügt über eine automatische Scroll-Funktion, die Sie zu den aktuell gesungenen Texten führt.</p>
+            <p>Sie können diese Funktion mit dem A-Button deaktivieren.</p>
+        </div>
+    </div>
     <div class="presenter-bar" id="presenterBar">Presenter Mode Active</div>
     <div class="controls">
         <button onclick="changeFontSize(1)"><i class="fas fa-plus"></i></button>
@@ -346,7 +391,22 @@
         const isPresenter = urlParams.has('presenter');
         const presenterBar = document.getElementById('presenterBar');
 
-        document.querySelectorAll('p').forEach((p, index) => {
+        const modal = document.getElementById('infoModal');
+        const closeModal = document.getElementById('closeModal');
+
+        window.onload = function() {
+            modal.style.display = "block";
+        }
+
+        closeModal.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
             p.setAttribute('data-id', index);
             if (isPresenter) {
                 presenterBar.style.display = 'block';
