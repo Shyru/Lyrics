@@ -141,8 +141,9 @@
             text-decoration: none;
             cursor: pointer;
         }
+    </style>
 </head>
-<body>
+
 <body>
     <div id="infoModal" class="modal">
         <div class="modal-content">
@@ -379,8 +380,10 @@
         </p>
     </section>
 
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+
     <footer>
-        Made with ❤️ by File Factory.
+        Made with ❤️ by File Factory.<br/><br/>
     </footer>
     
     <script src="/socket.io/socket.io.js"></script>
@@ -391,6 +394,11 @@
         const urlParams = new URLSearchParams(window.location.search);
         const isPresenter = urlParams.has('presenter');
         const presenterBar = document.getElementById('presenterBar');
+
+        if (isPresenter) {
+            presenterBar.style.display = 'block';
+            document.body.classList.add('presenter-active');
+        }
 
         const modal = document.getElementById('infoModal');
         const closeModal = document.getElementById('closeModal');
@@ -408,16 +416,19 @@
                 modal.style.display = "none";
             }
         }
-            p.setAttribute('data-id', index);
-            if (isPresenter) {
-                presenterBar.style.display = 'block';
-                document.body.classList.add('presenter-active');
-                p.addEventListener('click', () => {
-                    document.querySelectorAll('p').forEach(p => p.classList.remove('active-paragraph'));
-                    p.classList.add('active-paragraph');
-                    socket.emit('scrollTo', index);
-                });
-            }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll('p').forEach((p, index) => {
+                p.setAttribute('data-id', index);
+
+                if (isPresenter) {
+                    p.addEventListener('click', () => {
+                        document.querySelectorAll('p').forEach(p => p.classList.remove('active-paragraph'));
+                        p.classList.add('active-paragraph');
+                        socket.emit('scrollTo', index);
+                    });
+                }
+            });
         });
 
         socket.on('scrollTo', (pId) => {
