@@ -14,11 +14,6 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
-        socket.on('userCount', (count) => {
-            if (isPresenter) {
-                presenterBar.textContent = `Presenter Mode Active - Active Users: ${count}`;
-            }
-        });
 
         .highlight {
             color: #00008B; /* Dunkelblaue Textfarbe */
@@ -453,6 +448,12 @@
                 }, 1000);
             }
             lastScrollId = pId;
+        });
+
+        socket.on('userCount', (count) => {
+            if (isPresenter) {
+                presenterBar.textContent = `Presenter Mode Active - Active Users: ${count}`;
+            }
         });
 
         function changeFontSize(amount) {
