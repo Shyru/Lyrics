@@ -29,6 +29,12 @@
             right: 10px;
             z-index: 1000;
         }
+        .controls {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        
         .controls button {
             margin: 5px;
             padding: 10px;
@@ -56,7 +62,7 @@
     <div class="controls">
         <button onclick="changeFontSize(1)">+</button>
         <button onclick="changeFontSize(-1)">-</button>
-        <button onclick="toggleDarkMode()">Dark Mode</button>
+        <button onclick="toggleDarkMode()">🌙</button>
     </div>
     <div class="toc">
         <h2>Lieder Sportwoche Gottesdienst</h2>
