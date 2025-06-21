@@ -335,7 +335,6 @@
         }
 
         socket.on('scrollTo', (pId) => {
-            console.log("Got scrollTo message!");
             const p = document.querySelector(`p[data-id='${pId}']`);
             if (p) {
                 p.scrollIntoView({ behavior: 'smooth', block: 'center' });
