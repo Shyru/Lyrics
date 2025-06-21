@@ -102,6 +102,7 @@
         <button onclick="changeFontSize(1)"><i class="fas fa-plus"></i></button>
         <button onclick="changeFontSize(-1)"><i class="fas fa-minus"></i></button>
         <button onclick="toggleDarkMode()"><i class="fas fa-moon"></i></button>
+        <button id="toggleAutoScroll" class="active"><i class="fas fa-font"></i></button>
     </div>
     <div class="toc">
         <h1>Lieder Sportwoche Gottesdienst</h1>
@@ -329,6 +330,8 @@
     
     <script src="/socket.io/socket.io.js"></script>
     <script>
+        let autoScrollEnabled = true;
+        let lastScrollId = null;
         const socket = io();
         const urlParams = new URLSearchParams(window.location.search);
         const isPresenter = urlParams.has('presenter');
@@ -349,7 +352,11 @@
 
         socket.on('scrollTo', (pId) => {
             const p = document.querySelector(`p[data-id='${pId}']`);
-            if (p) {
+            if (p && autoScrollEnabled) {
+                console.log(`Scrolling to paragraph with ID: ${pId}`);
+                p.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            lastScrollId = pId;
                 console.log(`Scrolling to paragraph with ID: ${pId}`);
                 p.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
@@ -374,7 +381,16 @@
             document.body.classList.toggle('dark-mode');
         }
 
-        document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('toggleAutoScroll').addEventListener('click', function() {
+            autoScrollEnabled = !autoScrollEnabled;
+            this.classList.toggle('active', autoScrollEnabled);
+            if (autoScrollEnabled && lastScrollId !== null) {
+                const p = document.querySelector(`p[data-id='${lastScrollId}']`);
+                if (p) {
+                    p.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+        });
             const toc = document.querySelector('.toc');
             const sections = document.querySelectorAll('section');
             sections.forEach(section => {
