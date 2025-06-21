@@ -71,9 +71,11 @@
     </div>
     <script>
         function changeFontSize(amount) {
-            const body = document.body;
-            const currentSize = parseFloat(window.getComputedStyle(body, null).getPropertyValue('font-size'));
-            body.style.fontSize = (currentSize + amount) + 'px';
+            const paragraphs = document.querySelectorAll('p');
+            paragraphs.forEach(p => {
+                const currentSize = parseFloat(window.getComputedStyle(p, null).getPropertyValue('font-size'));
+                p.style.fontSize = (currentSize + amount) + 'px';
+            });
         }
 
         function toggleDarkMode() {
