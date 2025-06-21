@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Songtexte für das Event</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .controls button {
+            margin: 5px;
+            padding: 10px;
+            font-size: 16px;
+            width: 50px;
+            height: 50px;
+            background-color: white;
+            border: 2px solid rgb(128, 128, 128);
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .controls button:hover {
+            background-color: #f0f0f0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        section {
+            padding-left: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+        .controls {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        
+        h2 {
+            font-size: 2em;
+            margin: 20px 0;
+        }
+        p {
+            margin: 10px 0;
+        }
+        .toc {
+            margin: 20px;
+        }
+        .toc a {
+            display: block;
+            margin: 5px 0;
+            text-decoration: none;
+            color: blue;
+        }
+        footer {
+            text-align: center;
+            color: rgb(128, 128, 128);
+            font-size:80%;
+        }
+        .presenter-bar {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: yellow;
+            text-align: center;
+            padding: 10px;
+            z-index: 1001;
+        }
+    </style>
+</head>
+<body>
+    <div class="presenter-bar" id="presenterBar">Presenter Mode Active</div>
+    <div class="controls">
+        <button onclick="changeFontSize(1)"><i class="fas fa-plus"></i></button>
+        <button onclick="changeFontSize(-1)"><i class="fas fa-minus"></i></button>
+        <button onclick="toggleDarkMode()"><i class="fas fa-moon"></i></button>
+    </div>
+    <div class="toc">
+        <h1>Lieder Sportwoche Gottesdienst</h1>
+    </div>
+
+    <section>
+        <h2>Lobet</h2>
+        <p>
+            Lobet den m&auml;chtigen K&ouml;nig der Ehren!<br/>
+            Wacht auf, lasst den Lobgesang h&ouml;ren.<br/>
+            Kommt, ruft es in alle Welt: Unser Retter kommt!<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp; Alles, was in uns ist, jubelt dir zu.<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp; Herr, wir erheben dich, unser K&ouml;nig bist du.<br/>
+            Wir singen laut, bis die Erde bebt,<br/>
+            h&ouml;rn niemals auf, von dir zu erz&auml;hln.<br/>
+            Wir geh&rsquo;n hinaus, und die Welt wird sehn,<br/>
+            wie herrlich Jesus ist.<br/>
+        </p>
+        <p>
+            Lobet den Herren, der uns hat gesegnet<br/>
+            Und Liebe in Str&ouml;men geregnet.<br/>
+            O Seele, vergiss es nicht, wie gut er ist.<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp; Alles, was in uns ist, jubelt dir zu.<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp; Herr, wir erheben dich, unser K&ouml;nig bist du.<br/>
+            Wir singen laut, bis die Erde bebt,<br/>
+            h&ouml;rn niemals auf, von dir zu erz&auml;hln.<br/>
+            Wir geh&rsquo;n hinaus, und die Welt wird sehn,<br/>
+            wie herrlich Jesus ist.<br/>
+        </p>
+        <p>
+            Hell strahlt dein Licht unaufh&ouml;rlich<br/>
+            in die Welt hinein.<br/>
+            Laut schallt dein Lob unaufhaltsam.<br/>
+            Der Himmel stimmt mit ein.<br/>
+        </p>
+        <p>
+            Wir singen laut, bis die Erde bebt,<br/>
+            h&ouml;rn niemals auf, von dir zu erz&auml;hln.<br/>
+            Wir geh&rsquo;n hinaus, und die Welt wird sehn,<br/>
+            wie herrlich Jesus ist.<br/>
+        </p>
+    </section>
+
+    <!-- Weitere Abschnitte hier -->
+
+    <footer>
+        Made with ❤️ by File Factory.
+    </footer>
+    
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const urlParams = new URLSearchParams(window.location.search);
+        const isPresenter = urlParams.has('presenter');
+        const presenterBar = document.getElementById('presenterBar');
+
+        if (isPresenter) {
+            presenterBar.style.display = 'block';
+            document.querySelectorAll('p').forEach((p, index) => {
+                p.setAttribute('data-id', index);
+                p.addEventListener('click', () => {
+                    socket.emit('scrollTo', index);
+                });
+            });
+        }
+
+        socket.on('scrollTo', (pId) => {
+            const p = document.querySelector(`p[data-id='${pId}']`);
+            if (p) {
+                p.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+
+        function changeFontSize(amount) {
+            const paragraphs = document.querySelectorAll('p');
+
+            paragraphs.forEach(p => {
+                const currentSize = parseFloat(window.getComputedStyle(p, null).getPropertyValue('font-size'));
+                p.style.fontSize = (currentSize + (amount * 3)) + 'px';
+            });
+
+            const tocLinks = document.querySelectorAll('.toc a');
+            tocLinks.forEach(link => {
+                const currentSize = parseFloat(window.getComputedStyle(link, null).getPropertyValue('font-size'));
+                link.style.fontSize = (currentSize + (amount * 3)) + 'px';
+            });
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const toc = document.querySelector('.toc');
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                const title = section.querySelector('h2').innerText;
+                const id = section.getAttribute('id') || title.replace(/\s+/g, '-').toLowerCase();
+                section.setAttribute('id', id);
+                const link = document.createElement('a');
+                link.href = `#${id}`;
+                link.innerText = title;
+                toc.appendChild(link);
+            });
+        });
+    </script>
+</body>
+</html>
