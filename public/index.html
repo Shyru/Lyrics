@@ -324,15 +324,15 @@
         const isPresenter = urlParams.has('presenter');
         const presenterBar = document.getElementById('presenterBar');
 
-        if (isPresenter) {
-            presenterBar.style.display = 'block';
-            document.querySelectorAll('p').forEach((p, index) => {
-                p.setAttribute('data-id', index);
+        document.querySelectorAll('p').forEach((p, index) => {
+            p.setAttribute('data-id', index);
+            if (isPresenter) {
+                presenterBar.style.display = 'block';
                 p.addEventListener('click', () => {
                     socket.emit('scrollTo', index);
                 });
-            });
-        }
+            }
+        });
 
         socket.on('scrollTo', (pId) => {
             const p = document.querySelector(`p[data-id='${pId}']`);
