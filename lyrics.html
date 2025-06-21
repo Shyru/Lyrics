@@ -15,6 +15,10 @@
         p {
             margin: 10px 20px 10px 20px; /* Fügt links und rechts einen Rand hinzu */
         }
+        section {
+            padding-left: 20px;
+        }
+        
         .dark-mode {
             background-color: #121212;
             color: #ffffff;
@@ -53,22 +57,22 @@
         <button onclick="changeFontSize(1)">+</button>
         <button onclick="changeFontSize(-1)">-</button>
         <button onclick="toggleDarkMode()">Dark Mode</button>
-    </div>
+    </section>
     <div class="toc">
         <h2>Inhaltsverzeichnis</h2>
         <a href="#song1">Lied 1</a>
         <a href="#song2">Lied 2</a>
         <a href="#song3">Lied 3</a>
     </div>
-    <div id="song1">
+    <section id="song1">
         <h1>Lied 1</h1>
         <p>Erster Vers des Liedes 1<br>Weiterer Text...</p>
-    </div>
-    <div id="song2">
+    </section>
+    <section id="song2">
         <h1>Lied 2</h1>
         <p>Erster Vers des Liedes 2<br>Weiterer Text...</p>
-    </div>
-    <div id="song3">
+    </section>
+    <section id="song3">
         <h1>Lied 3</h1>
         <p>Erster Vers des Liedes 3<br>Weiterer Text...</p>
     </div>
