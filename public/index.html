@@ -14,6 +14,12 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
+        .active-paragraph {
+            border: 2px solid #8B0000; /* Samtiger Rand */
+            padding: 5px;
+            border-radius: 5px;
+        }
+
         body.presenter-active {
             padding-top: 50px; /* Platz für die Präsentationsleiste */
         }
@@ -334,6 +340,8 @@
                 presenterBar.style.display = 'block';
                 document.body.classList.add('presenter-active');
                 p.addEventListener('click', () => {
+                    document.querySelectorAll('p').forEach(p => p.classList.remove('active-paragraph'));
+                    p.classList.add('active-paragraph');
                     socket.emit('scrollTo', index);
                 });
             }
