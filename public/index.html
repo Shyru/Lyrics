@@ -396,8 +396,7 @@
         let autoScrollEnabled = true;
         let lastScrollId = null;
         const socket = io({
-            transports: ['websocket'],
-            upgrade: false
+            transports: ['polling']
         });
         const urlParams = new URLSearchParams(window.location.search);
         const isPresenter = urlParams.has('presenter');
