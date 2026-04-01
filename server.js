@@ -15,30 +15,70 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-let activeUsers = 0;
+let lastScrollId = null;
+const clientStates = new Map();
+
+function getActiveUsers() {
+    let activeUsers = 0;
+
+    clientStates.forEach((state) => {
+        if (!state.isPresenter && state.autoScrollEnabled) {
+            activeUsers++;
+        }
+    });
+
+    return activeUsers;
+}
+
+function broadcastUserCount() {
+    io.emit('userCount', getActiveUsers());
+}
 
 io.on('connection', (socket) => {
-    activeUsers++;
-    io.emit('userCount', activeUsers);
+    clientStates.set(socket.id, {
+        isPresenter: false,
+        autoScrollEnabled: true
+    });
+
+    broadcastUserCount();
+    console.log('a user connected');
+
+    socket.on('registerClient', ({ isPresenter = false, autoScrollEnabled = true } = {}) => {
+        clientStates.set(socket.id, {
+            isPresenter,
+            autoScrollEnabled
+        });
+
+        broadcastUserCount();
+
+        if (!isPresenter && autoScrollEnabled && lastScrollId !== null) {
+            socket.emit('scrollTo', lastScrollId);
+        }
+    });
 
     socket.on('toggleScroll', (isEnabled) => {
-        if (isEnabled) {
-            activeUsers++;
-        } else {
-            activeUsers--;
+        const currentState = clientStates.get(socket.id) || {
+            isPresenter: false,
+            autoScrollEnabled: true
+        };
+
+        currentState.autoScrollEnabled = isEnabled;
+        clientStates.set(socket.id, currentState);
+        broadcastUserCount();
+
+        if (!currentState.isPresenter && isEnabled && lastScrollId !== null) {
+            socket.emit('scrollTo', lastScrollId);
         }
-        io.emit('userCount', activeUsers);
     });
-    console.log('a user connected');
+
     socket.on('scrollTo', (pId) => {
+        lastScrollId = pId;
         io.emit('scrollTo', pId);
     });
 
     socket.on('disconnect', () => {
-        activeUsers--;
-        io.emit('userCount', activeUsers);
-    });
-    socket.on('disconnect', () => {
+        clientStates.delete(socket.id);
+        broadcastUserCount();
         console.log('user disconnected');
     });
 });

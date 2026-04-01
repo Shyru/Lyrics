@@ -407,6 +407,13 @@
             document.body.classList.add('presenter-active');
         }
 
+        socket.on('connect', () => {
+            socket.emit('registerClient', {
+                isPresenter,
+                autoScrollEnabled
+            });
+        });
+
         const modal = document.getElementById('infoModal');
         const closeModal = document.getElementById('closeModal');
 
