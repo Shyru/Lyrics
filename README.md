@@ -97,6 +97,7 @@ Das Inhaltsverzeichnis wird beim Laden automatisch aus allen `section > h2` erze
 
 - Das Info-Modal wird pro Browser nur einmal angezeigt und ueber `localStorage` gemerkt
 - Der Dark-Mode folgt automatisch `prefers-color-scheme`
+- Ein manueller Klick auf den Dark-Mode-Button ueberschreibt die Systemvorgabe pro Browser dauerhaft ueber `localStorage`
 - Im Presenter-Modus wird die aktive Zeile mit einer Outline markiert, ohne dass der Text durch Border/Padding springt
 - Im Dark-Mode ist die Presenter-Markierung gelb statt rot
 

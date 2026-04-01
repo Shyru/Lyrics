@@ -128,14 +128,33 @@
     <script>
         const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
         const themeColorMeta = document.getElementById('theme-color-meta');
+        const themePreferenceStorageKey = 'lyricsThemePreference';
 
-        function applyDarkModePreference(isDarkMode) {
+        function applyTheme(isDarkMode) {
             document.documentElement.classList.toggle('dark-mode', isDarkMode);
             document.body.classList.toggle('dark-mode', isDarkMode);
             themeColorMeta.setAttribute('content', isDarkMode ? '#15171c' : '#f3ede2');
         }
 
-        applyDarkModePreference(prefersDarkMode.matches);
+        function getStoredThemePreference() {
+            return localStorage.getItem(themePreferenceStorageKey);
+        }
+
+        function getEffectiveDarkMode() {
+            const storedPreference = getStoredThemePreference();
+
+            if (storedPreference === 'dark') {
+                return true;
+            }
+
+            if (storedPreference === 'light') {
+                return false;
+            }
+
+            return prefersDarkMode.matches;
+        }
+
+        applyTheme(getEffectiveDarkMode());
 
         function changeFontSize(amount) {
             const paragraphs = document.querySelectorAll('p');
@@ -153,11 +172,15 @@
         }
 
         function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
+            const nextIsDarkMode = !getEffectiveDarkMode();
+            localStorage.setItem(themePreferenceStorageKey, nextIsDarkMode ? 'dark' : 'light');
+            applyTheme(nextIsDarkMode);
         }
 
         prefersDarkMode.addEventListener('change', (event) => {
-            applyDarkModePreference(event.matches);
+            if (!getStoredThemePreference()) {
+                applyTheme(event.matches);
+            }
         });
 
         document.addEventListener("DOMContentLoaded", function() {
