@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ece7dd" id="theme-color-meta">
     <title>Liedtexte Karfreitag</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -21,24 +22,50 @@
             --button-hover: rgba(245, 239, 230, 0.96);
         }
 
+        html {
+            height: 100%;
+            min-height: 100%;
+            background-color: var(--bg-top);
+            color-scheme: light;
+            overscroll-behavior-y: none;
+        }
+
+        html.dark-mode {
+            background-color: #15171c;
+            color-scheme: dark;
+        }
+
         body {
             font-family: Georgia, "Times New Roman", serif;
             margin: 0;
             padding: 0;
             line-height: 1.6;
             color: var(--text-color);
+            background: transparent;
+            transition: background-color 0.3s, color 0.3s;
+            position: relative;
+            min-height: 100%;
+            min-height: 100vh;
+            overscroll-behavior-y: none;
+            isolation: isolate;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            pointer-events: none;
             background:
                 radial-gradient(circle at top, rgba(255, 248, 236, 0.95), rgba(255, 248, 236, 0) 34%),
                 linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
-            transition: background-color 0.3s, color 0.3s;
-            position: relative;
-            min-height: 100vh;
         }
 
         body::before {
             content: "";
             position: fixed;
             inset: 0;
+            z-index: -1;
             pointer-events: none;
             background:
                 linear-gradient(90deg, transparent calc(50% - 1px), rgba(108, 86, 66, 0.055) calc(50% - 1px), rgba(108, 86, 66, 0.055) calc(50% + 1px), transparent calc(50% + 1px)),
@@ -126,12 +153,14 @@
             --button-border: rgba(216, 199, 175, 0.18);
             --button-hover: rgba(36, 40, 48, 0.98);
             color: var(--text-color);
+        }
+
+        body.dark-mode::after {
             background:
                 radial-gradient(circle at top, rgba(78, 62, 49, 0.26), rgba(78, 62, 49, 0) 32%),
                 linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
         }
 
-        .dark-mode body::before,
         body.dark-mode::before {
             background:
                 linear-gradient(90deg, transparent calc(50% - 1px), rgba(240, 215, 191, 0.04) calc(50% - 1px), rgba(240, 215, 191, 0.04) calc(50% + 1px), transparent calc(50% + 1px)),
@@ -687,6 +716,7 @@
         let autoScrollEnabled = true;
         let lastScrollId = null;
         const infoModalStorageKey = 'lyricsInfoModalSeen';
+        const themeColorMeta = document.getElementById('theme-color-meta');
         const socket = io({
             transports: ['polling']
         });
@@ -701,7 +731,9 @@
         }
 
         function applyDarkModePreference(isDarkMode) {
+            document.documentElement.classList.toggle('dark-mode', isDarkMode);
             document.body.classList.toggle('dark-mode', isDarkMode);
+            themeColorMeta.setAttribute('content', isDarkMode ? '#15171c' : '#f3ede2');
         }
 
         applyDarkModePreference(prefersDarkMode.matches);

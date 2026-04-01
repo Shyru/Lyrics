@@ -3,15 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ece7dd" id="theme-color-meta">
     <title>{{PAGE_TITLE}}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        html {
+            height: 100%;
+            min-height: 100%;
+            background-color: #f3ede2;
+            color-scheme: light;
+            overscroll-behavior-y: none;
+        }
+
+        html.dark-mode {
+            background-color: #15171c;
+            color-scheme: dark;
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             line-height: 1.6;
+            background: transparent;
             transition: background-color 0.3s, color 0.3s;
+            min-height: 100%;
+            overscroll-behavior-y: none;
+            isolation: isolate;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            pointer-events: none;
+            background:
+                radial-gradient(circle at top, rgba(255, 248, 236, 0.95), rgba(255, 248, 236, 0) 34%),
+                linear-gradient(180deg, #f3ede2 0%, #ece7dd 100%);
         }
 
         section {
@@ -98,9 +127,12 @@
 
     <script>
         const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+        const themeColorMeta = document.getElementById('theme-color-meta');
 
         function applyDarkModePreference(isDarkMode) {
+            document.documentElement.classList.toggle('dark-mode', isDarkMode);
             document.body.classList.toggle('dark-mode', isDarkMode);
+            themeColorMeta.setAttribute('content', isDarkMode ? '#15171c' : '#f3ede2');
         }
 
         applyDarkModePreference(prefersDarkMode.matches);
