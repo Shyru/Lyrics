@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{PAGE_TITLE}}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        section {
+            padding-left: 20px;
+            margin-bottom: 40px;
+        }
+
+        .dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        .controls {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .controls button {
+            margin: 5px;
+            padding: 10px;
+            font-size: 16px;
+            width: 50px;
+            height: 50px;
+            background-color: white;
+            border: 2px solid rgb(128, 128, 128);
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .controls button:hover {
+            background-color: #f0f0f0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            font-size: 2em;
+            margin: 20px 0;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        .toc {
+            margin: 20px;
+        }
+
+        .toc a {
+            display: block;
+            margin: 5px 0;
+            text-decoration: none;
+            color: blue;
+        }
+
+        footer {
+            text-align: center;
+            color: rgb(128, 128, 128);
+            font-size: 80%;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <button onclick="changeFontSize(1)"><i class="fas fa-plus"></i></button>
+        <button onclick="changeFontSize(-1)"><i class="fas fa-minus"></i></button>
+        <button onclick="toggleDarkMode()"><i class="fas fa-moon"></i></button>
+    </div>
+    <div class="toc">
+        <h1>{{PAGE_HEADING}}</h1>
+    </div>
+
+    <!-- SONGS:INJECT -->
+
+    <footer>
+        Made with ❤️ by File Factory.
+    </footer>
+
+    <script>
+        const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+
+        function applyDarkModePreference(isDarkMode) {
+            document.body.classList.toggle('dark-mode', isDarkMode);
+        }
+
+        applyDarkModePreference(prefersDarkMode.matches);
+
+        function changeFontSize(amount) {
+            const paragraphs = document.querySelectorAll('p');
+
+            paragraphs.forEach(p => {
+                const currentSize = parseFloat(window.getComputedStyle(p, null).getPropertyValue('font-size'));
+                p.style.fontSize = (currentSize + (amount * 3)) + 'px';
+            });
+
+            const tocLinks = document.querySelectorAll('.toc a');
+            tocLinks.forEach(link => {
+                const currentSize = parseFloat(window.getComputedStyle(link, null).getPropertyValue('font-size'));
+                link.style.fontSize = (currentSize + (amount * 3)) + 'px';
+            });
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        prefersDarkMode.addEventListener('change', (event) => {
+            applyDarkModePreference(event.matches);
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const toc = document.querySelector('.toc');
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                const title = section.querySelector('h2').innerText;
+                const id = section.getAttribute('id') || title.replace(/\s+/g, '-').toLowerCase();
+                section.setAttribute('id', id);
+                const link = document.createElement('a');
+                link.href = `#${id}`;
+                link.innerText = title;
+                toc.appendChild(link);
+            });
+        });
+    </script>
+</body>
+</html>
